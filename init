@@ -1,3 +1,4 @@
+import java.util.Scanner;
 import java.util.Stack;
 
 public class StackCalculator {
@@ -11,18 +12,19 @@ public class StackCalculator {
 
     public void displayWelcomeMessage() {
         System.out.println("Welcome to the Stack Calculator!");
+        System.out.println("You can use commands to manipulate and view the stack.");
     }
 
     public void displayCommands() {
-        System.out.println("Available Commands:");
-        System.out.println("1. push <value> - Add a value to the stack.");
-        System.out.println("2. pop - Remove the top value from the stack.");
-        System.out.println("3. size - Display the number of elements in the stack.");
-        System.out.println("4. listStack - Display all elements in the stack.");
-        System.out.println("5. clearStack - Remove all elements from the stack.");
-        System.out.println("6. multiply - Multiply the top two values on the stack.");
-        System.out.println("7. divide - Divide the second-top value by the top value on the stack.");
-        System.out.println("8. exit - Exit the application.");
+        System.out.println("\nAvailable Commands:");
+        System.out.println("push <value> - Add a value to the stack.");
+        System.out.println("pop - Remove the top value from the stack.");
+        System.out.println("size - Display the number of elements in the stack.");
+        System.out.println("listStack - Display all elements in the stack.");
+        System.out.println("clear - Remove all elements from the stack.");
+        System.out.println("mult - Multiply the top two values on the stack.");
+        System.out.println("div - Divide the second-top value by the top value on the stack.");
+        System.out.println("exit - Exit the application.");
     }
 
     public void push(double value) {
@@ -36,7 +38,7 @@ public class StackCalculator {
             System.out.println("Stack is empty. Nothing to pop.");
             return null;
         }
-        command = "pop";
+        command = "sub";
         Double value = calculator.pop();
         System.out.println(value + " popped from the stack.");
         return value;
@@ -60,7 +62,7 @@ public class StackCalculator {
 
     public void clearStack() {
         calculator.clear();
-        command = "clearStack";
+        command = "clear";
         System.out.println("Stack cleared.");
     }
 
@@ -73,7 +75,7 @@ public class StackCalculator {
         double value2 = calculator.pop();
         double result = value1 * value2;
         calculator.push(result);
-        command = "multiply";
+        command = "mult";
         System.out.println("Result of multiplication: " + result);
     }
 
@@ -91,25 +93,66 @@ public class StackCalculator {
         double dividend = calculator.pop();
         double result = dividend / divisor;
         calculator.push(result);
-        command = "divide";
+        command = "div";
         System.out.println("Result of division: " + result);
+    }
+
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        displayWelcomeMessage();
+        displayCommands();
+
+        while (true) {
+            System.out.print("\nEnter command: ");
+            String input = scanner.nextLine().trim();
+            String[] parts = input.split("\\s+");
+            String action = parts[0].toLowerCase();
+
+            try {
+                switch (action) {
+                    case "push":
+                        if (parts.length < 2) {
+                            System.out.println("Usage: push <value>");
+                        } else {
+                            double value = Double.parseDouble(parts[1]);
+                            push(value);
+                        }
+                        break;
+                    case "pop":
+                        pop();
+                        break;
+                    case "size":
+                        System.out.println("Stack size: " + size());
+                        break;
+                    case "liststack":
+                        listStack();
+                        break;
+                    case "clearstack":
+                        clearStack();
+                        break;
+                    case "multiply":
+                        multiply();
+                        break;
+                    case "divide":
+                        divide();
+                        break;
+                    case "exit":
+                        System.out.println("Exiting Stack Calculator. Goodbye!");
+                        scanner.close();
+                        return;
+                    default:
+                        System.out.println("Invalid command. Type 'exit' to quit or refer to the command list above.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number format. Please enter a valid numeric value.");
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
+            }
+        }
     }
 
     public static void main(String[] args) {
         StackCalculator stackCalculator = new StackCalculator();
-        stackCalculator.displayWelcomeMessage();
-        stackCalculator.displayCommands();
-
-        stackCalculator.push(10.0);
-        stackCalculator.push(20.0);
-        stackCalculator.multiply();
-        stackCalculator.listStack();
-
-        stackCalculator.push(2.0);
-        stackCalculator.divide();
-        stackCalculator.listStack();
-
-        stackCalculator.clearStack();
-        stackCalculator.listStack();
+        stackCalculator.run();
     }
 }
