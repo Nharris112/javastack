@@ -1,0 +1,115 @@
+import java.util.Stack;
+
+public class StackCalculator {
+    private Stack<Double> calculator;
+    private String command;
+
+    public StackCalculator() {
+        calculator = new Stack<>();
+        command = "";
+    }
+
+    public void displayWelcomeMessage() {
+        System.out.println("Welcome to the Stack Calculator!");
+    }
+
+    public void displayCommands() {
+        System.out.println("Available Commands:");
+        System.out.println("1. push <value> - Add a value to the stack.");
+        System.out.println("2. pop - Remove the top value from the stack.");
+        System.out.println("3. size - Display the number of elements in the stack.");
+        System.out.println("4. listStack - Display all elements in the stack.");
+        System.out.println("5. clearStack - Remove all elements from the stack.");
+        System.out.println("6. multiply - Multiply the top two values on the stack.");
+        System.out.println("7. divide - Divide the second-top value by the top value on the stack.");
+        System.out.println("8. exit - Exit the application.");
+    }
+
+    public void push(double value) {
+        calculator.push(value);
+        command = "push";
+        System.out.println(value + " pushed to the stack.");
+    }
+
+    public Double pop() {
+        if (calculator.isEmpty()) {
+            System.out.println("Stack is empty. Nothing to pop.");
+            return null;
+        }
+        command = "pop";
+        Double value = calculator.pop();
+        System.out.println(value + " popped from the stack.");
+        return value;
+    }
+
+    public int size() {
+        return calculator.size();
+    }
+
+    public Object[] getValues() {
+        return calculator.toArray();
+    }
+
+    public void listStack() {
+        if (calculator.isEmpty()) {
+            System.out.println("Stack is empty.");
+        } else {
+            System.out.println("Stack elements (top to bottom): " + calculator);
+        }
+    }
+
+    public void clearStack() {
+        calculator.clear();
+        command = "clearStack";
+        System.out.println("Stack cleared.");
+    }
+
+    public void multiply() {
+        if (calculator.size() < 2) {
+            System.out.println("Not enough elements on the stack to perform multiplication.");
+            return;
+        }
+        double value1 = calculator.pop();
+        double value2 = calculator.pop();
+        double result = value1 * value2;
+        calculator.push(result);
+        command = "multiply";
+        System.out.println("Result of multiplication: " + result);
+    }
+
+    public void divide() {
+        if (calculator.size() < 2) {
+            System.out.println("Not enough elements on the stack to perform division.");
+            return;
+        }
+        double divisor = calculator.pop();
+        if (divisor == 0) {
+            System.out.println("Cannot divide by zero. Operation aborted.");
+            calculator.push(divisor);
+            return;
+        }
+        double dividend = calculator.pop();
+        double result = dividend / divisor;
+        calculator.push(result);
+        command = "divide";
+        System.out.println("Result of division: " + result);
+    }
+
+    public static void main(String[] args) {
+        StackCalculator stackCalculator = new StackCalculator();
+        stackCalculator.displayWelcomeMessage();
+        stackCalculator.displayCommands();
+
+        stackCalculator.push(10.0);
+        stackCalculator.push(20.0);
+        stackCalculator.multiply();
+        stackCalculator.listStack();
+
+        stackCalculator.push(2.0);
+        stackCalculator.divide();
+        stackCalculator.listStack();
+
+        stackCalculator.clearStack();
+        stackCalculator.listStack();
+    }
+}
